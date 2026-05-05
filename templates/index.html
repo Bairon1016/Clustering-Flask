@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Clustering COVID</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body {
+    font-family: Arial;
+    margin: 20px;
+    background: #f4f4f4;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    background: white;
+    margin-bottom: 20px;
+}
+
+th, td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: center;
+    font-size: 12px;
+}
+
+th {
+    background: #6c63ff;
+    color: white;
+}
+
+/* Colores por cluster */
+.cluster-0 { background-color: #ffe5e5; }
+.cluster-1 { background-color: #e5ffe5; }
+.cluster-2 { background-color: #e5e5ff; }
+.cluster-3 { background-color: #fff5cc; }
+
+canvas {
+    background: white;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Clustering COVID Colombia</h1>
+
+<!-- GRÁFICO -->
+<h2>Distribución de Clusters</h2>
+<canvas id="graficoClusters"></canvas>
+
+<!-- SCATTER -->
+<h2>Visualización (Edad vs Cluster)</h2>
+<canvas id="scatterPlot"></canvas>
+
+<!-- Interpretación -->
+<h2>Interpretación</h2>
+
+<h3>Sexo</h3>
+<ul>
+{% for k,v in mapa_sexo.items() %}
+<li>{{k}} → {{v}}</li>
+{% endfor %}
+</ul>
+
+<h3>Estado</h3>
+<ul>
+{% for k,v in mapa_estado.items() %}
+<li>{{k}} → {{v}}</li>
+{% endfor %}
+</ul>
+
+<h3>Recuperación</h3>
+<ul>
+{% for k,v in mapa_recuperacion.items() %}
+<li>{{k}} → {{v}}</li>
+{% endfor %}
+</ul>
+
+<!-- RESULTADOS RESUMIDOS -->
+<h2>Resumen de Clusters</h2>
+<ul>
+    {% for key, value in resumen_cluster.items() %}
+        <li>Cluster {{ key }}: {{ value }} registros</li>
+    {% endfor %}
+</ul>
+
+<h2>Centroides</h2>
+<ul>
+    {% for centroide in centroides %}
+        <li>Cluster {{ loop.index0 }} → {{ centroide }}</li>
+    {% endfor %}
+</ul>
+
+<!-- TABLA -->
+<h2>Datos</h2>
+
+{% if resultados %}
+<table>
+<tr>
+{% for key in resultados[0].keys() %}
+<th>{{key}}</th>
+{% endfor %}
+</tr>
+
+{% for fila in resultados %}
+<tr class="cluster-{{fila.Cluster}}">
+{% for value in fila.values() %}
+<td>{{value}}</td>
+{% endfor %}
+</tr>
+{% endfor %}
+</table>
+{% else %}
+<p>No hay datos disponibles.</p>
+{% endif %}
+
+<script id="data-json" type="application/json">
+{
+    "resumen": {{ resumen_cluster | tojson }},
+    "datos": {{ resultados | tojson }}
+}
+</script>
+
+<script>
+const rawData = JSON.parse(document.getElementById("data-json").textContent);
+
+const resumen = rawData.resumen;
+const datos = rawData.datos;
+
+// Gráfico de barras
+new Chart(document.getElementById("graficoClusters"), {
+    type: 'bar',
+    data: {
+        labels: Object.keys(resumen),
+        datasets: [{
+            label: 'Cantidad por cluster',
+            data: Object.values(resumen)
+        }]
+    }
+});
+
+// Scatter plot
+new Chart(document.getElementById("scatterPlot"), {
+    type: 'scatter',
+    data: {
+        datasets: [
+            {
+                label: 'Cluster 0',
+                data: datos.filter(d => d.Cluster === 0).map(d => ({
+                    x: d.Edad,
+                    y: d.Cluster
+                })),
+                backgroundColor: 'red'
+            },
+            {
+                label: 'Cluster 1',
+                data: datos.filter(d => d.Cluster === 1).map(d => ({
+                    x: d.Edad,
+                    y: d.Cluster
+                })),
+                backgroundColor: 'green'
+            },
+            {
+                label: 'Cluster 2',
+                data: datos.filter(d => d.Cluster === 2).map(d => ({
+                    x: d.Edad,
+                    y: d.Cluster
+                })),
+                backgroundColor: 'blue'
+            }
+        ]
+    },
+    options: {
+        scales: {
+            x: { title: { display: true, text: 'Edad' }},
+            y: { title: { display: true, text: 'Cluster' }}
+        }
+    }
+});
+</script>
+
+</body>
+</html>
