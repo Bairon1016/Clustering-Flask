@@ -1,64 +1,92 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-<meta charset="UTF-8">
-<title>Clustering COVID</title>
+    <title>K-Means COVID</title>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<style>
-body {
-    font-family: Arial;
-    margin: 20px;
-    background: #f4f4f4;
-}
+    <style>
+        body { margin:0; font-family:Arial; display:flex; }
 
-table {
-    border-collapse: collapse;
-    width: 100%;
-    background: white;
-    margin-bottom: 20px;
-}
+        .sidebar {
+            width:250px; height:100vh;
+            background:#2c3e50; color:white;
+            padding-top:20px;
+        }
 
-th, td {
-    padding: 8px;
-    border: 1px solid #ddd;
-    text-align: center;
-    font-size: 12px;
-}
+        .sidebar button {
+            width:100%; padding:15px;
+            background:none; border:none;
+            color:white; text-align:left;
+            cursor:pointer;
+        }
 
-th {
-    background: #6c63ff;
-    color: white;
-}
+        .sidebar button:hover { background:#34495e; }
 
-/* Colores por cluster */
-.cluster-0 { background-color: #ffe5e5; }
-.cluster-1 { background-color: #e5ffe5; }
-.cluster-2 { background-color: #e5e5ff; }
-.cluster-3 { background-color: #fff5cc; }
+        .content { flex:1; padding:20px; background:#f4f4f4; }
 
-canvas {
-    background: white;
-    padding: 10px;
-    margin-bottom: 20px;
-}
-</style>
+        .section { display:none; }
+        .active { display:block; }
+
+        table {
+            width:100%; border-collapse:collapse;
+            background:white;
+        }
+
+        th,td {
+            border:1px solid #ddd;
+            padding:6px; text-align:center;
+            font-size:12px;
+        }
+
+        th { background:#6c63ff; color:white; }
+
+        .cluster-0 { background:#ffe5e5; }
+        .cluster-1 { background:#e5ffe5; }
+        .cluster-2 { background:#e5e5ff; }
+
+        canvas { background:white; margin-bottom:20px; }
+    </style>
 </head>
 
 <body>
 
-<h1>Clustering COVID Colombia</h1>
+<div class="sidebar">
+    <button onclick="mostrar('descripcion')">Descripción</button>
+    <button onclick="mostrar('dataset')">Dataset</button>
+    <button onclick="mostrar('kmeans')">K-Means</button>
+    <button onclick="mostrar('ejecutar')">Resultados</button>
+</div>
 
-<!-- GRÁFICO -->
+<div class="content">
+
+<div id="descripcion" class="section active">
+    <h1>Descripción</h1>
+    <p>Análisis de clustering sobre casos de COVID-19 en Colombia.</p>
+</div>
+
+<div id="dataset" class="section">
+    <h1>Dataset</h1>
+    <p>Se utilizan variables numéricas como edad y días de recuperación.</p>
+</div>
+
+<div id="kmeans" class="section">
+    <h1>K-Means</h1>
+    <p>Algoritmo que agrupa datos según similitud.</p>
+</div>
+
+<div id="ejecutar" class="section">
+
+<h1>Resultados</h1>
+
 <h2>Distribución de Clusters</h2>
-<canvas id="graficoClusters"></canvas>
+<canvas id="bar"></canvas>
 
-<!-- SCATTER -->
-<h2>Visualización (Edad vs Cluster)</h2>
-<canvas id="scatterPlot"></canvas>
+<p>Total de datos utilizados: {{ resultados|length }}</p>
 
-<!-- Interpretación -->
+<h2>Visualización (Edad vs Días de Recuperación)</h2>
+<canvas id="scatter"></canvas>
+
 <h2>Interpretación</h2>
 
 <h3>Sexo</h3>
@@ -82,25 +110,29 @@ canvas {
 {% endfor %}
 </ul>
 
-<!-- RESULTADOS RESUMIDOS -->
-<h2>Resumen de Clusters</h2>
+<h3>Resumen de Clusters</h3>
 <ul>
-    {% for key, value in resumen_cluster.items() %}
-        <li>Cluster {{ key }}: {{ value }} registros</li>
-    {% endfor %}
+{% for key, value in resumen_cluster.items() %}
+<li>Cluster {{key}}: {{value}} registros</li>
+{% endfor %}
 </ul>
 
-<h2>Centroides</h2>
+<h3>Centroides</h3>
 <ul>
-    {% for centroide in centroides %}
-        <li>Cluster {{ loop.index0 }} → {{ centroide }}</li>
-    {% endfor %}
+{% for c in centroides %}
+<li>Cluster {{loop.index0}} → {{c}}</li>
+{% endfor %}
 </ul>
 
-<!-- TABLA -->
-<h2>Datos</h2>
+<h3>Análisis</h3>
+<ul>
+<li><b>Cluster 0:</b> Pacientes jóvenes con recuperación rápida.</li>
+<li><b>Cluster 1:</b> Pacientes intermedios.</li>
+<li><b>Cluster 2:</b> Pacientes mayores o recuperación lenta.</li>
+</ul>
 
-{% if resultados %}
+<h2>Datos (primeros 100)</h2>
+
 <table>
 <tr>
 {% for key in resultados[0].keys() %}
@@ -108,80 +140,87 @@ canvas {
 {% endfor %}
 </tr>
 
-{% for fila in resultados %}
+{% for fila in resultados[:100] %}
 <tr class="cluster-{{fila.Cluster}}">
-{% for value in fila.values() %}
-<td>{{value}}</td>
+{% for v in fila.values() %}
+<td>{{v}}</td>
 {% endfor %}
 </tr>
 {% endfor %}
 </table>
-{% else %}
-<p>No hay datos disponibles.</p>
-{% endif %}
 
-<script id="data-json" type="application/json">
+<script id="data" type="application/json">
 {
-    "resumen": {{ resumen_cluster | tojson }},
-    "datos": {{ resultados | tojson }}
+"resumen": {{ resumen_cluster | tojson }},
+"datos": {{ resultados | tojson }},
+"centroides": {{ centroides | tojson }}
 }
 </script>
 
+</div>
+
+</div>
+
 <script>
-const rawData = JSON.parse(document.getElementById("data-json").textContent);
+function mostrar(id){
+document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+document.getElementById(id).classList.add("active");
+}
 
-const resumen = rawData.resumen;
-const datos = rawData.datos;
+const raw = JSON.parse(document.getElementById("data").textContent);
 
-// Gráfico de barras
-new Chart(document.getElementById("graficoClusters"), {
-    type: 'bar',
-    data: {
-        labels: Object.keys(resumen),
-        datasets: [{
-            label: 'Cantidad por cluster',
-            data: Object.values(resumen)
-        }]
-    }
+// BARRAS
+new Chart(document.getElementById("bar"), {
+type:'bar',
+data:{
+labels:Object.keys(raw.resumen),
+datasets:[{
+label:'Cantidad por cluster',
+data:Object.values(raw.resumen)
+}]
+},
+options:{
+scales:{
+x:{title:{display:true,text:'Cluster'}},
+y:{title:{display:true,text:'Cantidad de pacientes'}}
+}
+}
 });
 
-// Scatter plot
-new Chart(document.getElementById("scatterPlot"), {
-    type: 'scatter',
-    data: {
-        datasets: [
-            {
-                label: 'Cluster 0',
-                data: datos.filter(d => d.Cluster === 0).map(d => ({
-                    x: d.Edad,
-                    y: d.Cluster
-                })),
-                backgroundColor: 'red'
-            },
-            {
-                label: 'Cluster 1',
-                data: datos.filter(d => d.Cluster === 1).map(d => ({
-                    x: d.Edad,
-                    y: d.Cluster
-                })),
-                backgroundColor: 'green'
-            },
-            {
-                label: 'Cluster 2',
-                data: datos.filter(d => d.Cluster === 2).map(d => ({
-                    x: d.Edad,
-                    y: d.Cluster
-                })),
-                backgroundColor: 'blue'
-            }
-        ]
-    },
-    options: {
-        scales: {
-            x: { title: { display: true, text: 'Edad' }},
-            y: { title: { display: true, text: 'Cluster' }}
-        }
-    }
+// SCATTER
+new Chart(document.getElementById("scatter"), {
+type:'scatter',
+data:{
+datasets:[
+{
+label:'Cluster 0',
+data:raw.datos.filter(d=>d.Cluster===0).map(d=>({x:d.Edad,y:d.Dias_Recuperacion})),
+backgroundColor:'red'
+},
+{
+label:'Cluster 1',
+data:raw.datos.filter(d=>d.Cluster===1).map(d=>({x:d.Edad,y:d.Dias_Recuperacion})),
+backgroundColor:'green'
+},
+{
+label:'Cluster 2',
+data:raw.datos.filter(d=>d.Cluster===2).map(d=>({x:d.Edad,y:d.Dias_Recuperacion})),
+backgroundColor:'blue'
+},
+{
+label:'Centroides',
+data:raw.centroides.map(c=>({x:c[0],y:c[1]})),
+backgroundColor:'black',
+pointRadius:8
+}
+]
+},
+options:{
+scales:{
+x:{title:{display:true,text:'Edad'}},
+y:{title:{display:true,text:'Días de recuperación'}}
+}
+}
 });
 </script>
 
