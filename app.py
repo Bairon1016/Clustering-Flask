@@ -3,21 +3,21 @@ import Clustering
 
 app = Flask(__name__)
 
+
 @app.route("/")
 def inicio():
-    info = Clustering.RealizarClustering()
+    data = Clustering.RealizarClustering(3)
+
     return render_template(
         "index.html",
-        resultados=info["resultados"],
-        resumen_cluster=info["resumen_cluster"],
-        centroides=info["centroides"],
-        mapa_sexo=info["mapa_sexo"],
-        mapa_estado=info["mapa_estado"],
-        mapa_recuperacion=info["mapa_recuperacion"],
+        resultados=data["resultados"],
+        resumen_cluster=data["resumen_cluster"],
+        centroides=data["centroides"],
+        mapa_sexo=data["mapa_sexo"],
+        mapa_estado=data["mapa_estado"],
+        mapa_recuperacion=data["mapa_recuperacion"]
     )
+
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-# Mover todo a un template HTML para mostrar los resultados de forma más amigable
-# Cargar un dataset de minería de datos desde Kaggle 
