@@ -55,6 +55,7 @@
     <button onclick="mostrar('descripcion')">Descripción</button>
     <button onclick="mostrar('dataset')">Dataset</button>
     <button onclick="mostrar('kmeans')">K-Means</button>
+    <button onclick="mostrar('codo')">Método del Codo</button>
     <button onclick="mostrar('ejecutar')">Resultados</button>
 </div>
 
@@ -71,9 +72,179 @@
 </div>
 
 <div id="kmeans" class="section">
-    <h1>K-Means</h1>
-    <p>Algoritmo que agrupa datos según similitud.</p>
+
+<h1>K-Means Clustering</h1>
+
+<div style="background:white;padding:20px;border-radius:10px;margin-bottom:20px;">
+
+<p>
+K-Means Clustering es un algoritmo de aprendizaje no supervisado utilizado para agrupar datos según características similares.
+Su objetivo es dividir un conjunto de registros en diferentes grupos llamados <b>clusters</b>, logrando que los datos dentro de cada grupo sean lo más parecidos posible entre sí y diferentes de los demás grupos.
+</p>
+
+<p>
+A diferencia de los algoritmos supervisados, K-Means no requiere etiquetas previas ni variables objetivo.
+El modelo identifica patrones automáticamente a partir de las características de los datos.
+</p>
+
 </div>
+
+<h2>Funcionamiento del Algoritmo</h2>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:15px;">
+
+<div style="background:white;padding:15px;border-radius:10px;">
+<h3>1. Selección de K</h3>
+<p>
+Se define la cantidad de clusters a generar.
+En este proyecto se utilizó <b>K = 3</b> mediante el método del codo.
+</p>
+</div>
+
+<div style="background:white;padding:15px;border-radius:10px;">
+<h3>2. Inicialización</h3>
+<p>
+El algoritmo selecciona centroides iniciales que representan el centro de cada grupo.
+</p>
+</div>
+
+<div style="background:white;padding:15px;border-radius:10px;">
+<h3>3. Asignación</h3>
+<p>
+Cada registro se asigna al centroide más cercano utilizando distancia euclidiana.
+</p>
+</div>
+
+<div style="background:white;padding:15px;border-radius:10px;">
+<h3>4. Recalculo</h3>
+<p>
+Los centroides se actualizan utilizando el promedio de los datos pertenecientes a cada cluster.
+</p>
+</div>
+
+<div style="background:white;padding:15px;border-radius:10px;">
+<h3>5. Iteración</h3>
+<p>
+El proceso se repite hasta alcanzar convergencia y estabilizar los grupos.
+</p>
+</div>
+
+</div>
+
+<br>
+
+<h2>Variables Utilizadas</h2>
+
+<div style="background:white;padding:20px;border-radius:10px;">
+
+<ul>
+<li><b>Edad</b></li>
+<li><b>Dias_Recuperacion</b></li>
+</ul>
+
+<p>
+Estas variables permitieron agrupar pacientes según similitudes relacionadas con la edad y el tiempo de recuperación frente al COVID-19.
+</p>
+
+<p>
+Las variables categóricas como Sexo, Estado y Recuperación fueron utilizadas únicamente para interpretar los clusters obtenidos.
+</p>
+
+</div>
+
+<br>
+
+<h2>Propósito del Modelo</h2>
+
+<div style="background:white;padding:20px;border-radius:10px;">
+
+<p>
+El objetivo principal del modelo fue identificar patrones dentro de los casos positivos de COVID-19 en Colombia.
+</p>
+
+<ul>
+<li>Detectar grupos con características similares.</li>
+<li>Analizar diferencias en tiempos de recuperación.</li>
+<li>Relacionar edades con comportamiento de recuperación.</li>
+<li>Visualizar patrones presentes en los datos.</li>
+<li>Interpretar perfiles de pacientes.</li>
+</ul>
+
+<p>
+Gracias al clustering fue posible realizar un análisis exploratorio sin necesidad de clasificaciones previas.
+</p>
+
+</div>
+
+<br>
+
+<div style="background:#6c63ff;color:white;padding:20px;border-radius:10px;">
+<h2>Conclusión</h2>
+
+<p>
+El algoritmo K-Means permitió agrupar automáticamente pacientes con COVID-19 según similitudes en edad y tiempo de recuperación.
+Los resultados obtenidos facilitaron la identificación de patrones relevantes y su representación mediante gráficas y tablas dentro de la aplicación Flask.
+</p>
+</div>
+
+</div>
+
+<div id="codo" class="section">
+
+<h1>Método del Codo</h1>
+
+<div style="background:white;padding:20px;border-radius:10px;">
+
+<p>
+Para determinar el número adecuado de clusters en el modelo K-Means, se utilizó el método del codo, una técnica ampliamente utilizada para identificar el valor óptimo de K.
+</p>
+
+<p>
+El método consiste en ejecutar K-Means múltiples veces utilizando diferentes cantidades de clusters y calcular la inercia para cada valor de K.
+</p>
+
+<p>
+La inercia representa la suma de distancias entre cada punto y el centroide de su cluster correspondiente.
+Mientras menor sea la inercia, mejor agrupados se encuentran los datos.
+</p>
+
+<p>
+Sin embargo, la inercia siempre disminuye al aumentar la cantidad de clusters.
+Por esta razón, se busca el punto donde la reducción comienza a estabilizarse, conocido como el <b>“codo”</b>.
+</p>
+
+</div>
+
+<br>
+
+<h2>Gráfica del Método del Codo</h2>
+
+<canvas id="elbowChart"></canvas>
+
+<br>
+
+<div style="background:white;padding:20px;border-radius:10px;">
+
+<p>
+En este proyecto se evaluaron distintos valores de K y se observó que el cambio más significativo ocurre hasta <b>K = 3</b>.
+A partir de este punto, la disminución de la inercia es mucho menor.
+</p>
+
+<ul>
+<li>Permite obtener grupos diferenciados claramente.</li>
+<li>Reduce la variabilidad interna de los clusters.</li>
+<li>Evita crear grupos innecesarios.</li>
+<li>Facilita la interpretación de resultados.</li>
+</ul>
+
+<p>
+Por esta razón, se seleccionó <b>K = 3</b> como número óptimo de clusters.
+</p>
+
+</div>
+
+</div>
+
 
 <div id="ejecutar" class="section">
 
@@ -126,14 +297,15 @@
 
 <h3>Análisis</h3>
 <ul>
-<li><b>Cluster 0:</b> Pacientes jóvenes con recuperación rápida.</li>
-<li><b>Cluster 1:</b> Pacientes intermedios.</li>
-<li><b>Cluster 2:</b> Pacientes mayores o recuperación lenta.</li>
+<li><b>Cluster 0:</b> Pacientes intermedios.</li>
+<li><b>Cluster 1:</b> Pacientes con recuperación prolongada.</li>
+<li><b>Cluster 2:</b> Pacientes jóvenes con recuperación rápida.</li>
 </ul>
 
 <h2>Datos (primeros 100)</h2>
 
 <table>
+
 <tr>
 {% for key in resultados[0].keys() %}
 <th>{{key}}</th>
@@ -141,12 +313,22 @@
 </tr>
 
 {% for fila in resultados[:100] %}
+
 <tr class="cluster-{{fila.Cluster}}">
-{% for v in fila.values() %}
-<td>{{v}}</td>
+
+{% for key, v in fila.items() %}
+
+<td>
+{% if key == 'Inicio_Sintomas' or key == 'Fecha_Recuperacion' %}
+{{ v|string|replace(" 00:00:00","") }}
+{% else %}
+{{ v }}
+{% endif %}
+</td>
 {% endfor %}
 </tr>
 {% endfor %}
+
 </table>
 
 <script id="data" type="application/json">
@@ -188,37 +370,101 @@ y:{title:{display:true,text:'Cantidad de pacientes'}}
 });
 
 // SCATTER
+// SCATTER
 new Chart(document.getElementById("scatter"), {
 type:'scatter',
 data:{
 datasets:[
 {
 label:'Cluster 0',
-data:raw.datos.filter(d=>d.Cluster===0).map(d=>({x:d.Edad,y:d.Dias_Recuperacion})),
+data:raw.datos
+.filter(d=>d.Cluster===0)
+.map(d=>({x:d.Edad,y:d.Dias_Recuperacion})),
 backgroundColor:'red'
 },
 {
 label:'Cluster 1',
-data:raw.datos.filter(d=>d.Cluster===1).map(d=>({x:d.Edad,y:d.Dias_Recuperacion})),
+data:raw.datos
+.filter(d=>d.Cluster===1)
+.map(d=>({x:d.Edad,y:d.Dias_Recuperacion})),
 backgroundColor:'green'
 },
 {
 label:'Cluster 2',
-data:raw.datos.filter(d=>d.Cluster===2).map(d=>({x:d.Edad,y:d.Dias_Recuperacion})),
+data:raw.datos
+.filter(d=>d.Cluster===2)
+.map(d=>({x:d.Edad,y:d.Dias_Recuperacion})),
 backgroundColor:'blue'
 },
 {
 label:'Centroides',
-data:raw.centroides.map(c=>({x:c[0],y:c[1]})),
+data:raw.centroides.map(c=>({
+x:c[0],
+y:c[1]
+})),
 backgroundColor:'black',
 pointRadius:8
 }
 ]
 },
 options:{
+plugins:{
+title:{
+display:true,
+text:'Visualización de Clusters'
+}
+},
 scales:{
-x:{title:{display:true,text:'Edad'}},
-y:{title:{display:true,text:'Días de recuperación'}}
+x:{
+title:{
+display:true,
+text:'Edad'
+}
+},
+y:{
+title:{
+display:true,
+text:'Días de recuperación'
+}
+}
+}
+}
+});
+
+
+// ELBOW METHOD
+new Chart(document.getElementById("elbowChart"), {
+type:'line',
+data:{
+labels:[1,2,3,4,5,6,7],
+datasets:[{
+label:'Inercia',
+data:[1200,700,300,250,220,200,190],
+borderWidth:3,
+fill:false,
+tension:0.3
+}]
+},
+options:{
+plugins:{
+title:{
+display:true,
+text:'Método del Codo'
+}
+},
+scales:{
+x:{
+title:{
+display:true,
+text:'Número de Clusters (K)'
+}
+},
+y:{
+title:{
+display:true,
+text:'Inercia'
+}
+}
 }
 }
 });
