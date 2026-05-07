@@ -44,7 +44,7 @@ def RealizarClustering(nClusters=3):
 
     df, mapa_sexo, mapa_estado, mapa_recuperacion = ObtenerDatos()
 
-    # 🔥 SOLO variables numéricas reales
+    # Seleccionar solo las columnas numéricas para el clustering
     X = df[["Edad", "Dias_Recuperacion"]]
 
     scaler = StandardScaler()
@@ -55,7 +55,7 @@ def RealizarClustering(nClusters=3):
 
     df["Cluster"] = etiquetas
 
-    # 🔥 IMPORTANTÍSIMO (centroides en escala real)
+    # Invertir la escala de los centroides para interpretarlos mejor
     centroides = scaler.inverse_transform(modelo.cluster_centers_).tolist()
 
     resultados = df.to_dict(orient="records")
