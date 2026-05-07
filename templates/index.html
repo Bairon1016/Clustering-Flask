@@ -63,12 +63,112 @@
 
 <div id="descripcion" class="section active">
     <h1>Descripción</h1>
-    <p>Análisis de clustering sobre casos de COVID-19 en Colombia.</p>
+
+    <div style="background:white;padding:20px;border-radius:10px;margin-bottom:20px;">
+        <p>
+            El dataset utilizado contiene información sobre casos positivos de COVID-19 reportados en Colombia durante el período comprendido entre agosto de 2020 y septiembre de 2021.
+            Este conjunto de datos está compuesto por <b>1,200 registros</b> y <b>12 variables</b> que describen diferentes aspectos clínicos, demográficos y geográficos de los pacientes.
+        </p>
+    </div>
+
+    <h2>Variables del Dataset</h2>
+
+    <div style="background:white;padding:20px;border-radius:10px;margin-bottom:20px;">
+        <ul>
+            <li><b>Fecha_Reporte:</b> Fecha en la que se reportó oficialmente el caso positivo.</li>
+            <li><b>Departamento:</b> Departamento colombiano donde se registró el caso.</li>
+            <li><b>Ciudad/Municipio:</b> Municipio específico de residencia del paciente.</li>
+            <li><b>Edad:</b> Edad del paciente al momento del diagnóstico.</li>
+            <li><b>Sexo:</b> Género del paciente (F: Femenino, M: Masculino).</li>
+            <li><b>Tipo_Contagio:</b> Clasificación del contagio (Comunitaria o Relacionado).</li>
+            <li><b>Ubicación:</b> Lugar donde el paciente recibió atención o aislamiento (Casa, Hospital, Fallecido, etc.).</li>
+            <li><b>Estado:</b> Condición clínica del paciente (Leve, Moderado, Grave, Fallecido).</li>
+            <li><b>Recuperación:</b> Estado final del paciente (Recuperado o Fallecido).</li>
+            <li><b>Inicio_Sintomas:</b> Fecha en la que el paciente comenzó a presentar síntomas.</li>
+            <li><b>Fecha_Recuperacion:</b> Fecha en la que el paciente fue dado de alta o confirmado como recuperado.</li>
+            <li><b>Tipo_Recuperacion:</b> Método utilizado para confirmar la recuperación (PCR o Tiempo).</li>
+        </ul>
+    </div>
+
+    <div style="background:white;padding:20px;border-radius:10px;">
+        <p>
+            Este dataset proviene de registros oficiales de salud pública y representa una muestra significativa de la evolución de la pandemia en diferentes regiones del país,
+            permitiendo realizar análisis multivariados que contribuyan a una mejor comprensión del fenómeno epidemiológico.
+        </p>
+    </div>
 </div>
 
 <div id="dataset" class="section">
     <h1>Dataset</h1>
-    <p>Se utilizan variables numéricas como edad y días de recuperación.</p>
+
+    <div style="background:white;padding:20px;border-radius:10px;margin-bottom:20px;">
+        <p>Se utilizan variables numéricas como edad y días de recuperación.</p>
+        <a href="/descargar-dataset">
+            <button style="margin-top:10px;padding:10px 20px;background:#6c63ff;color:white;border:none;border-radius:8px;cursor:pointer;font-size:14px;">
+                Descargar Dataset (CSV)
+            </button>
+        </a>
+    </div>
+
+    <h2>Justificación Dataset</h2>
+
+    <div style="background:white;padding:20px;border-radius:10px;margin-bottom:20px;">
+        <p>
+            La selección de este dataset se basa en su relevancia para el análisis epidemiológico y su potencial para generar conocimiento aplicable en contextos de salud pública.
+            A continuación, se presentan las razones que justifican su utilización:
+        </p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:15px;margin-bottom:20px;">
+
+        <div style="background:white;padding:15px;border-radius:10px;">
+            <h3>Representatividad geográfica y temporal</h3>
+            <p>
+                El dataset incluye casos provenientes de múltiples departamentos y municipios de Colombia, abarcando un período crítico de la pandemia.
+                Esto permite identificar diferencias regionales en el comportamiento del virus y los perfiles de pacientes afectados.
+            </p>
+        </div>
+
+        <div style="background:white;padding:15px;border-radius:10px;">
+            <h3>Diversidad de variables clínicas y demográficas</h3>
+            <p>
+                La presencia de variables como edad, sexo, tipo de contagio, ubicación del paciente y estado de recuperación facilita la identificación de patrones complejos mediante técnicas de clustering.
+                Estas agrupaciones pueden revelar perfiles de riesgo, grupos etarios más vulnerables y condiciones asociadas a mayor mortalidad.
+            </p>
+        </div>
+
+        <div style="background:white;padding:15px;border-radius:10px;">
+            <h3>Aplicabilidad del algoritmo K-Means</h3>
+            <p>
+                El algoritmo K-Means es particularmente efectivo para identificar grupos naturales dentro de conjuntos de datos numéricos.
+                Al transformar variables categóricas mediante técnicas de codificación y normalizar los datos, se garantiza que el modelo pueda detectar similitudes entre pacientes basándose en múltiples dimensiones simultáneamente.
+            </p>
+        </div>
+
+        <div style="background:white;padding:15px;border-radius:10px;">
+            <h3>Utilidad para la toma de decisiones</h3>
+            <p>
+                Los resultados obtenidos del clustering pueden ser utilizados para segmentar poblaciones objetivo en campañas de vacunación, identificar zonas de alta incidencia que requieran intervención prioritaria,
+                y diseñar estrategias diferenciadas de atención según el perfil de cada cluster.
+            </p>
+        </div>
+
+        <div style="background:white;padding:15px;border-radius:10px;">
+            <h3>Disponibilidad y calidad de los datos</h3>
+            <p>
+                Este dataset cuenta con información estructurada y completa, lo que minimiza la necesidad de imputación masiva de valores faltantes y permite realizar un análisis robusto y confiable.
+            </p>
+        </div>
+
+    </div>
+
+    <div style="background:white;padding:20px;border-radius:10px;">
+        <p>
+            En conjunto, estas características hacen del dataset una herramienta valiosa para explorar el potencial del análisis de clustering en el ámbito de la epidemiología,
+            proporcionando una información y un análisis que contribuyen al control y mitigación de futuras crisis sanitarias.
+        </p>
+    </div>
+
 </div>
 
 <div id="kmeans" class="section">

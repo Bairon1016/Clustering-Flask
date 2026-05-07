@@ -1,5 +1,6 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, send_file
 import Clustering
+import os
 
 app = Flask(__name__)
 
@@ -17,6 +18,12 @@ def inicio():
         mapa_estado=data["mapa_estado"],
         mapa_recuperacion=data["mapa_recuperacion"]
     )
+
+
+@app.route("/descargar-dataset")
+def descargar_dataset():
+    ruta = os.path.join(os.path.dirname(__file__), "Casos positivos de COVID-19 en Colombia.csv")
+    return send_file(ruta, as_attachment=True)
 
 
 if __name__ == "__main__":
